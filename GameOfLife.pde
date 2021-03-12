@@ -1,8 +1,11 @@
 import de.bezier.guido.*;
 //Declare and initialize constants NUM_ROWS and NUM_COLS = 20
+public final static int NUM_ROWS = 20, NUM_COLS = 20;
 private Life[][] buttons; //2d array of Life buttons each representing one cell
 private boolean[][] buffer; //2d array of booleans to store state of buttons array
 private boolean running = true; //used to start and stop program
+//color?
+//frames?
 
 public void setup () {
   size(400, 400);
@@ -11,8 +14,14 @@ public void setup () {
   Interactive.make( this );
 
   //your code to initialize buttons goes here
-
+  buttons = new Life[NUMS_ROWS][NUM_COLS];
+  for(int r = 0; r < NUM_ROWS; r++) {
+    for(int c = 0; c < NUM_COLS; c++) {
+      buttons[r][c] = new Life (r, c);
+    }
+  }
   //your code to initialize buffer goes here
+  buffer = new boolean[NUM_ROWS][NUM_COLS];
 }
 
 public void draw () {
@@ -22,30 +31,89 @@ public void draw () {
   copyFromButtonsToBuffer();
 
   //use nested loops to draw the buttons here
-
+  for (int r = 0; r < NUM_ROWS; r++) {
+    for (int c = 0; c < NUM_COLS; c++) {
+      if (countNeighbors(r, c) == 3) {
+        buffer[r][c] = true;
+      } else if (countNeighbors(r, c) == 2 && buttons[r][c].getLife()) {
+        buffer[r][c] = false;
+      } else {
+        buffer[r][c] = false;
+      }
+      buttons[r][c].draw();
+    }
+  }
   copyFromBufferToButtons();
 }
 
 public void keyPressed() {
-  //your code here
+  if(key == ' ') {
+    running =! running;
+  }
+  if(key == 'c' || key == 'C') {
+    for(int r = 0; r < NUM_ROWS; r++) {
+      for(int c = 0; c < NUM_COLS; c++) {
+        buttons[r][c].setLife(false);  
+      }
+    }
+    running = false;
+  }
+  if(key == 'r' || key == 'R') {
+    for(int r = 0; r < NUM_ROWS; r++) {
+      for(int c = 0; c < NUM_COLS; c++) {
+        buttons[r][c] = new Life(r, c);  
+      }
+    frames = 6;
+    }
+    Color = color((float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100);
+    running = false;
+  }
+  if(key == 'p' || key == 'P') {
+    Color = color((float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100);  
+  }
+  if(keyCode == UP && frames < 10) {
+    frames++;
+  }
+  if(keyCode == DOWN && frames > 4) {
+    frames--;  
+  }
 }
 
 public void copyFromBufferToButtons() {
-  //your code here
+  for(int r = 0; r < NUM_ROWS; r++) {
+    for(int c = 0; c < NUM_COLS; c++) {
+      buttons[r][c].setLife(buffer[r][c]);
+    }
+  }
 }
 
 public void copyFromButtonsToBuffer() {
-  //your code here
+  for(int r = 0; r < NUM_ROWS; r++) {
+    for(int c = 0; c < NUM_COLS; c++) {
+      buffer[r][c] = buttons[r][c].getLife();
+    }
+  }
 }
 
 public boolean isValid(int r, int c) {
-  //your code here
+  if(r >= 0 && c >= 0 && r < NUM_ROWS && c < NUM_COLS) {
+    return true;
+  }
   return false;
 }
 
 public int countNeighbors(int row, int col) {
   int neighbors = 0;
-  //your code here
+  for(int r = row - 1; r <= row + 1; r++) {
+    for(int c = col - 1; c <= col + 1; c++) {
+      if(isValid(r, c) && buttons[r][c].getLife()) {
+        neighbors++;
+      }
+    }
+  }
+  if(buttons[row][col].getLife()) {
+    neighbors--;
+  }
   return neighbors;
 }
 
@@ -55,8 +123,8 @@ public class Life {
   private boolean alive;
 
   public Life (int row, int col) {
-    // width = 400/NUM_COLS;
-    // height = 400/NUM_ROWS;
+    width = 400/NUM_COLS;
+    height = 400/NUM_ROWS;
     myRow = row;
     myCol = col; 
     x = myCol*width;
@@ -77,10 +145,12 @@ public class Life {
     rect(x, y, width, height);
   }
   public boolean getLife() {
-    //replace the code one line below with your code
+    if(alive) {
+      return true;
+    }
     return false;
   }
   public void setLife(boolean living) {
-    //your code here
+    alive = living;
   }
 }
