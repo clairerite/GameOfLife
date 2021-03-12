@@ -4,17 +4,15 @@ public final static int NUM_ROWS = 20, NUM_COLS = 20;
 private Life[][] buttons; //2d array of Life buttons each representing one cell
 private boolean[][] buffer; //2d array of booleans to store state of buttons array
 private boolean running = true; //used to start and stop program
-//color?
-//frames?
 
 public void setup () {
   size(400, 400);
   frameRate(6);
   // make the manager
-  Interactive.make( this );
+  Interactive.make(this);
 
   //your code to initialize buttons goes here
-  buttons = new Life[NUMS_ROWS][NUM_COLS];
+  buttons = new Life[NUM_ROWS][NUM_COLS];
   for(int r = 0; r < NUM_ROWS; r++) {
     for(int c = 0; c < NUM_COLS; c++) {
       buttons[r][c] = new Life (r, c);
@@ -25,7 +23,7 @@ public void setup () {
 }
 
 public void draw () {
-  background( 0 );
+  background(0);
   if (running == false) //pause the program
     return;
   copyFromButtonsToBuffer();
@@ -50,32 +48,13 @@ public void keyPressed() {
   if(key == ' ') {
     running =! running;
   }
-  if(key == 'c' || key == 'C') {
+  if(key == '1') {
     for(int r = 0; r < NUM_ROWS; r++) {
       for(int c = 0; c < NUM_COLS; c++) {
         buttons[r][c].setLife(false);  
       }
     }
     running = false;
-  }
-  if(key == 'r' || key == 'R') {
-    for(int r = 0; r < NUM_ROWS; r++) {
-      for(int c = 0; c < NUM_COLS; c++) {
-        buttons[r][c] = new Life(r, c);  
-      }
-    frames = 6;
-    }
-    Color = color((float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100);
-    running = false;
-  }
-  if(key == 'p' || key == 'P') {
-    Color = color((float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100, (float)Math.random() * 256 + 100);  
-  }
-  if(keyCode == UP && frames < 10) {
-    frames++;
-  }
-  if(keyCode == DOWN && frames > 4) {
-    frames--;  
   }
 }
 
@@ -130,7 +109,7 @@ public class Life {
     x = myCol*width;
     y = myRow*height;
     alive = Math.random() < .5; // 50/50 chance cell will be alive
-    Interactive.add( this ); // register it with the manager
+    Interactive.add(this); // register it with the manager
   }
 
   // called by manager
