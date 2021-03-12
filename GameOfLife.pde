@@ -34,7 +34,7 @@ public void draw () {
       if (countNeighbors(r, c) == 3) {
         buffer[r][c] = true;
       } else if (countNeighbors(r, c) == 2 && buttons[r][c].getLife()) {
-        buffer[r][c] = false;
+        buffer[r][c] = true;
       } else {
         buffer[r][c] = false;
       }
@@ -48,7 +48,7 @@ public void keyPressed() {
   if(key == ' ') {
     running =! running;
   }
-  if(key == '1') {
+  if(key == BACKSPACE) {
     for(int r = 0; r < NUM_ROWS; r++) {
       for(int c = 0; c < NUM_COLS; c++) {
         buttons[r][c].setLife(false);  
